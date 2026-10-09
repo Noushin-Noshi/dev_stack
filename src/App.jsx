@@ -1,46 +1,35 @@
-import "react-toastify/dist/ReactToastify.css";
-import Footer from "./components/Footer";
 import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import TechCard from "./components/TechCard";
 import YourStack from "./components/YourStack";
-import { ToastContainer, toast } from "react-toastify";
 
 export default function App() {
   const [techs, setTechs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [stack, setStack] = useState([]);
 
-    useEffect(() => {
+  useEffect(() => {
     fetch("/technologies.json")
       .then((res) => res.json())
       .then((data) => {
         setTechs(data);
         setLoading(false);
       })
-      .catch(() => {
-        toast.error("Failed to load technologies");
-        setLoading(false);
-      });
+      .catch(() => setLoading(false));
   }, []);
-    const handleAdd = (tech) => {
-    if (stack.some((t) => t.id === tech.id)) {
-      toast.warn(`${tech.name} is already in your stack!`);
-      return;
-    }
+
+  const handleAdd = (tech) => {
+    if (stack.some((t) => t.id === tech.id)) return;
     setStack([...stack, tech]);
-    toast.success(`${tech.name} added to your stack`);
   };
 
   const handleRemove = (tech) => {
     setStack(stack.filter((t) => t.id !== tech.id));
-    toast.info(`${tech.name} removed from your stack`);
   };
 
   const handleRemoveAll = () => {
     setStack([]);
-    toast.error("All technologies removed");
   };
 
   return (
@@ -82,8 +71,6 @@ export default function App() {
           />
         </div>
       </section>
-      <Footer />
-      <ToastContainer position="top-right" autoClose={2000} />
     </>
   );
 }
