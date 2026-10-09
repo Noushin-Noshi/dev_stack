@@ -16,7 +16,10 @@ export default function App() {
         setTechs(data);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+            .catch((error) => {
+        console.error("JSON load failed:", error);
+        setLoading(false);
+      });
   }, []);
 
   const handleAdd = (tech) => {
